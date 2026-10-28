@@ -80,7 +80,7 @@ The circuit doesn't open firewall ports. Open port 3000 to the people who use Gr
 | --- | --- | --- | --- |
 | `hosts` | any | Required | Hosts to run the stack on, by name. Each value is an address, such as `"203.0.113.10"`, or a host object such as `{ address = "203.0.113.10", host_key = "ssh-ed25519 AAAA..." }`. A host object can also set `user`, `port`, `private_key_file` and `jump_hosts`. |
 | `grafana_admin_password` | string, ephemeral | Required | Password for Grafana's `admin` user, read on Grafana's first start. |
-| `targets` | map(list(string)) | `{}` | Scrape targets by job name, as `host:port`, such as `{ node = ["10.0.0.11:9100"] }`. |
+| `targets` | map(list(string)) | `{}` | Scrape targets by job name, as `host:port`, such as `{ node = ["10.0.0.11:9100"] }`. `prometheus` and `cadvisor` are taken. |
 | `scrape_interval` | string | `"30s"` | How often Prometheus scrapes each target. |
 | `retention` | string | `"15d"` | How long Prometheus keeps samples. |
 | `prometheus_listen` | string | `"127.0.0.1"` | Address Prometheus's port 9090 is published on. |

@@ -44,6 +44,11 @@ variable "targets" {
   type        = map(list(string))
   default     = {}
   description = "Scrape targets by job name, as host:port, such as { node = [\"10.0.0.11:9100\", \"10.0.0.12:9100\"] }."
+
+  validation {
+    condition     = !contains(keys(var.targets), "prometheus") && !contains(keys(var.targets), "cadvisor")
+    error_message = "The prometheus and cadvisor jobs are built in. Give your targets another job name."
+  }
 }
 
 variable "scrape_interval" {
