@@ -66,7 +66,18 @@ variable "retention" {
 variable "prometheus_listen" {
   type        = string
   default     = "127.0.0.1"
-  description = "Address Prometheus's port 9090 is published on. It has no login, so the default keeps it on the host; reach it through Grafana or an SSH tunnel."
+  description = "Address Prometheus's port is published on. It has no login, so the default keeps it on the host; reach it through Grafana or an SSH tunnel."
+}
+
+variable "prometheus_port" {
+  type        = number
+  default     = 9090
+  description = "Host port Prometheus is published on. Rocky Linux, AlmaLinux and RHEL cloud images often run Cockpit on 9090; pick another port there, such as 9091."
+
+  validation {
+    condition     = var.prometheus_port == floor(var.prometheus_port) && var.prometheus_port >= 1 && var.prometheus_port <= 65535
+    error_message = "prometheus_port must be a port number from 1 to 65535."
+  }
 }
 
 variable "grafana_listen" {
