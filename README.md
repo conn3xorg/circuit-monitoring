@@ -8,7 +8,7 @@ Pair it with [circuit-docker](https://github.com/conn3xorg/circuit-docker) to ge
 
 ```hcl
 module "docker" {
-  source = "github.com/conn3xorg/circuit-docker?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-docker?ref=v0.1.1"
 
   hosts = { monitor = "192.168.1.10" }
 }
@@ -24,7 +24,7 @@ module "node_exporter" {
 }
 
 module "monitoring" {
-  source = "github.com/conn3xorg/circuit-monitoring?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-monitoring?ref=v0.2.0"
 
   hosts                  = { monitor = "192.168.1.10" }
   grafana_admin_password = var.grafana_admin_password
@@ -112,7 +112,7 @@ Requires Conn3x v0.6.4 or later, and Docker Engine with the Compose plugin v2.23
 
 Rocky Linux 10, Fedora 45, Ubuntu 24.04 and Debian 13. CI applies [examples/local](examples/local), which installs Docker and node_exporter too, to each on amd64, checks that the second plan has no changes, and checks that all three services are running.
 
-It was also applied by hand, with circuit-docker, circuit-node-exporter, circuit-firewall and three other circuits, to an Ubuntu 24.04 droplet and a Rocky Linux 10 droplet with SELinux enforcing. That run found two problems, both fixed: Cockpit held port 9090 on Rocky Linux, hence `prometheus_port`, and a changed compose file only came up on the second apply. On both hosts Prometheus reported its own target, cAdvisor and node_exporter on the Docker bridge as up, Grafana answered on port 3000, moving Prometheus to another port took effect in a single apply, and after a reboot the stack came back with no plan changes and no SELinux denials.
+It was also applied by hand, with circuit-docker, circuit-node-exporter, circuit-firewall and three other circuits, to an Ubuntu 24.04 droplet and a Rocky Linux 10 droplet with SELinux enforcing. That run found two problems, both fixed: Cockpit held port 9090 on Rocky Linux, hence `prometheus_port`, and a changed compose file only came up on the second apply. On both hosts Prometheus reported its own target, cAdvisor and node_exporter on the Docker bridge as up, Grafana answered on port 3000, moving Prometheus to another port took effect in a single apply, and after a reboot the stack came back with no plan changes and no SELinux denials. The same checks passed on Fedora 44, with SELinux enforcing, and Debian 13 droplets, before and after a reboot.
 
 ## License
 
