@@ -62,9 +62,11 @@ On each host, in order:
 
 The stack has:
 
-- **Prometheus**, published on `prometheus_listen` port 9090, which is `127.0.0.1` by default because Prometheus has no login. It scrapes itself, cAdvisor and `targets`, and keeps samples for `retention`.
+- **Prometheus**, published on `prometheus_listen` port `prometheus_port`, which is `127.0.0.1:9090` by default because Prometheus has no login. It scrapes itself, cAdvisor and `targets`, and keeps samples for `retention`.
 - **Grafana**, published on `grafana_listen` port 3000, with sign-up turned off.
 - **cAdvisor**, which isn't published at all. Prometheus reaches it over the stack's own network. Set `cadvisor = false` to leave it out.
+
+Rocky Linux, AlmaLinux and RHEL cloud images often turn on Cockpit, whose `cockpit.socket` holds port 9090, so Prometheus can't start there and the apply fails with `address already in use`. Set `prometheus_port` to another port, such as 9091, or turn Cockpit off with `systemctl disable --now cockpit.socket`.
 
 Prometheus and Grafana keep their data in the `monitoring_prometheus` and `monitoring_grafana` Docker volumes, which outlive the containers.
 
@@ -83,7 +85,8 @@ The circuit doesn't open firewall ports. Open port 3000 to the people who use Gr
 | `targets` | map(list(string)) | `{}` | Scrape targets by job name, as `host:port`, such as `{ node = ["10.0.0.11:9100"] }`. `prometheus` and `cadvisor` are taken. |
 | `scrape_interval` | string | `"30s"` | How often Prometheus scrapes each target. |
 | `retention` | string | `"15d"` | How long Prometheus keeps samples. |
-| `prometheus_listen` | string | `"127.0.0.1"` | Address Prometheus's port 9090 is published on. |
+| `prometheus_listen` | string | `"127.0.0.1"` | Address Prometheus's port is published on. |
+| `prometheus_port` | number | `9090` | Host port Prometheus is published on. |
 | `grafana_listen` | string | `"0.0.0.0"` | Address Grafana's port 3000 is published on. |
 | `cadvisor` | bool | `true` | Run cAdvisor too. |
 | `prometheus_version` | string | `"v3.15.0"` | Tag of the `prom/prometheus` image. |
@@ -108,6 +111,8 @@ Requires Conn3x v0.6.4 or later, and Docker Engine with the Compose plugin v2.23
 ## Tested on
 
 Rocky Linux 10, Fedora 45, Ubuntu 24.04 and Debian 13. CI applies [examples/local](examples/local), which installs Docker and node_exporter too, to each on amd64, checks that the second plan has no changes, and checks that all three services are running.
+
+It was also applied by hand, with circuit-docker, circuit-node-exporter, circuit-firewall and three other circuits, to an Ubuntu 24.04 droplet and a Rocky Linux 10 droplet with SELinux enforcing. That run found two problems, both fixed: Cockpit held port 9090 on Rocky Linux, hence `prometheus_port`, and a changed compose file only came up on the second apply. On both hosts Prometheus reported its own target, cAdvisor and node_exporter on the Docker bridge as up, Grafana answered on port 3000, moving Prometheus to another port took effect in a single apply, and after a reboot the stack came back with no plan changes and no SELinux denials.
 
 ## License
 

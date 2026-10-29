@@ -22,7 +22,7 @@ locals {
         command = ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus", "--storage.tsdb.retention.time=${var.retention}"]
         configs = [{ source = "prometheus", target = "/etc/prometheus/prometheus.yml" }]
         volumes = ["prometheus:/prometheus"]
-        ports   = ["${var.prometheus_listen}:9090:9090"]
+        ports   = ["${var.prometheus_listen}:${var.prometheus_port}:9090"]
         restart = "unless-stopped"
       }
       grafana = {
@@ -93,11 +93,14 @@ circuit "monitoring" {
 
   # Runs docker compose up when the file changed since the last run, or when
   # one of the services isn't running. A new password only takes effect on
-  # Grafana's first start; change it in Grafana after that.
+  # Grafana's first start; change it in Grafana after that. The plan checks
+  # unless before the new file is written, so triggers makes the apply
+  # check it again once it is.
   step "up" {
     command {
-      command = "cd ${local.dir} && docker compose up -d --remove-orphans --wait && sha256sum compose.yaml > .applied"
-      unless  = "cd ${local.dir} && sha256sum -c --status .applied && [ \"$(docker compose config --services | sort)\" = \"$(docker compose ps --services --status running | sort)\" ]"
+      command  = "cd ${local.dir} && docker compose up -d --remove-orphans --wait && sha256sum compose.yaml > .applied"
+      unless   = "cd ${local.dir} && sha256sum -c --status .applied && [ \"$(docker compose config --services | sort)\" = \"$(docker compose ps --services --status running | sort)\" ]"
+      triggers = { compose = sha256(local.compose) }
     }
   }
 }
