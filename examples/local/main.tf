@@ -42,6 +42,8 @@ module "monitoring" {
 
   hosts                  = local.box
   grafana_admin_password = var.grafana_admin_password
+  # CI reaches Grafana on the container's address.
+  grafana_listen = "0.0.0.0"
   # Prometheus runs in a container, so it reaches the host's node_exporter
   # through the Docker bridge.
   targets              = { node = ["172.17.0.1:9100"] }

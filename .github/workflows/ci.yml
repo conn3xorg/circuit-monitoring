@@ -96,6 +96,11 @@ jobs:
           if grep -q change-me-locally terraform.tfstate; then echo "the Grafana password is in state" >&2; exit 1; fi
           sudo podman exec circuit-monitoring systemctl restart docker
           check
+      - name: Check every image is by digest and Grafana's default is loopback
+        run: |
+          sudo podman exec circuit-monitoring grep -Eq "image\"?:.*@sha256:" /opt/stacks/monitoring/compose.yaml
+          ! sudo podman exec circuit-monitoring sh -c 'grep -E "image\"?:" /opt/stacks/monitoring/compose.yaml | grep -v "@sha256:"'
+          grep -A2 'variable "grafana_listen"' variables.tf | grep -q '"127.0.0.1"'
       - name: Clean up
         if: always()
         working-directory: examples/local
