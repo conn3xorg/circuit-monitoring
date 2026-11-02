@@ -82,8 +82,8 @@ variable "prometheus_port" {
 
 variable "grafana_listen" {
   type        = string
-  default     = "0.0.0.0"
-  description = "Address Grafana's port 3000 is published on."
+  default     = "127.0.0.1"
+  description = "Address Grafana's port 3000 is published on. Its login is plain HTTP, so it stays on loopback until you say otherwise."
 }
 
 variable "cadvisor" {
@@ -108,4 +108,37 @@ variable "cadvisor_version" {
   type        = string
   default     = "v0.60.6"
   description = "Tag of the ghcr.io/google/cadvisor image."
+}
+
+variable "prometheus_digest" {
+  type        = string
+  default     = "sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e"
+  description = "Digest of the image for prometheus_version. Change it with the version."
+
+  validation {
+    condition     = can(regex("^sha256:[a-f0-9]{64}$", var.prometheus_digest))
+    error_message = "prometheus_digest must be a digest, such as \"sha256:45ed...\"."
+  }
+}
+
+variable "grafana_digest" {
+  type        = string
+  default     = "sha256:dbbc38ea21103cefb50396340cd88afec779c7e070b0a7bf5a75b4ce46651d3f"
+  description = "Digest of the image for grafana_version. Change it with the version."
+
+  validation {
+    condition     = can(regex("^sha256:[a-f0-9]{64}$", var.grafana_digest))
+    error_message = "grafana_digest must be a digest, such as \"sha256:45ed...\"."
+  }
+}
+
+variable "cadvisor_digest" {
+  type        = string
+  default     = "sha256:b8e7d1093144fd088f425ff003d75a4aa405de075db78dae3bc563730b1bd07a"
+  description = "Digest of the image for cadvisor_version. Change it with the version."
+
+  validation {
+    condition     = can(regex("^sha256:[a-f0-9]{64}$", var.cadvisor_digest))
+    error_message = "cadvisor_digest must be a digest, such as \"sha256:45ed...\"."
+  }
 }

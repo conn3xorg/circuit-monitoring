@@ -24,7 +24,7 @@ module "node_exporter" {
 }
 
 module "monitoring" {
-  source = "github.com/conn3xorg/circuit-monitoring?ref=v0.2.1"
+  source = "github.com/conn3xorg/circuit-monitoring?ref=v0.2.2"
 
   hosts                  = { monitor = "192.168.1.10" }
   grafana_admin_password = var.grafana_admin_password
@@ -74,7 +74,7 @@ A change to `targets`, `scrape_interval` or `retention` rewrites the Compose fil
 
 Targets are scraped from inside a container. To reach a node_exporter on the Docker host itself, use the bridge's address, `172.17.0.1:9100`.
 
-The circuit doesn't open firewall ports. Open port 3000 to the people who use Grafana, and each target's port to the Prometheus host.
+The circuit doesn't open firewall ports. Grafana stays on loopback unless you set `grafana_listen`: its login is plain HTTP, so put a reverse proxy in front, or an SSH tunnel. If you do publish it, open port 3000 to the people who use Grafana, and each target's port to the Prometheus host.
 
 ## Inputs
 
@@ -87,8 +87,9 @@ The circuit doesn't open firewall ports. Open port 3000 to the people who use Gr
 | `retention` | string | `"15d"` | How long Prometheus keeps samples. |
 | `prometheus_listen` | string | `"127.0.0.1"` | Address Prometheus's port is published on. |
 | `prometheus_port` | number | `9090` | Host port Prometheus is published on. |
-| `grafana_listen` | string | `"0.0.0.0"` | Address Grafana's port 3000 is published on. |
+| `grafana_listen` | string | `"127.0.0.1"` | Address Grafana's port 3000 is published on. |
 | `cadvisor` | bool | `true` | Run cAdvisor too. |
+| `prometheus_digest`, `grafana_digest`, `cadvisor_digest` | string | The digests of the default tags | Digest of each image. Set it whenever you change that image's version. |
 | `prometheus_version` | string | `"v3.15.0"` | Tag of the `prom/prometheus` image. |
 | `grafana_version` | string | `"13.2.4"` | Tag of the `grafana/grafana` image. |
 | `cadvisor_version` | string | `"v0.60.6"` | Tag of the `ghcr.io/google/cadvisor` image. |

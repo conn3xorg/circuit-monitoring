@@ -18,7 +18,7 @@ locals {
   compose = yamlencode({
     services = merge({
       prometheus = {
-        image   = "docker.io/prom/prometheus:${var.prometheus_version}"
+        image   = "docker.io/prom/prometheus:${var.prometheus_version}@${var.prometheus_digest}"
         command = ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus", "--storage.tsdb.retention.time=${var.retention}"]
         configs = [{ source = "prometheus", target = "/etc/prometheus/prometheus.yml" }]
         volumes = ["prometheus:/prometheus"]
@@ -26,7 +26,7 @@ locals {
         restart = "unless-stopped"
       }
       grafana = {
-        image = "docker.io/grafana/grafana:${var.grafana_version}"
+        image = "docker.io/grafana/grafana:${var.grafana_version}@${var.grafana_digest}"
         environment = {
           GF_SECURITY_ADMIN_PASSWORD__FILE = "/run/secrets/grafana_admin_password"
           GF_USERS_ALLOW_SIGN_UP           = "false"
@@ -39,7 +39,7 @@ locals {
       }
       }, var.cadvisor ? {
       cadvisor = {
-        image      = "ghcr.io/google/cadvisor:${var.cadvisor_version}"
+        image      = "ghcr.io/google/cadvisor:${var.cadvisor_version}@${var.cadvisor_digest}"
         privileged = true
         devices    = ["/dev/kmsg"]
         volumes    = ["/:/rootfs:ro", "/var/run:/var/run:ro", "/sys:/sys:ro", "/var/lib/docker/:/var/lib/docker:ro", "/dev/disk/:/dev/disk:ro"]
