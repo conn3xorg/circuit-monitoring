@@ -99,7 +99,7 @@ jobs:
       - name: Check every image is by digest and Grafana's default is loopback
         run: |
           sudo podman exec circuit-monitoring grep -Eq "image\"?:.*@sha256:" /opt/stacks/monitoring/compose.yaml
-          ! sudo podman exec circuit-monitoring sh -c 'grep -E "image\"?:" /opt/stacks/monitoring/compose.yaml | grep -v "@sha256:"'
+          if sudo podman exec circuit-monitoring sh -c 'grep -E "image\"?:" /opt/stacks/monitoring/compose.yaml | grep -v "@sha256:"'; then echo "an image has no digest" >&2; exit 1; fi
           grep -A2 'variable "grafana_listen"' variables.tf | grep -q '"127.0.0.1"'
       - name: Clean up
         if: always()
