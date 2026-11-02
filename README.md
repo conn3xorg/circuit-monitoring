@@ -1,5 +1,7 @@
 # circuit-monitoring
 
+[![Conn3x grade](https://conn3x.org/circuits/monitoring/grade.svg)](https://conn3x.org/circuits/monitoring/grade)
+
 A Conn3x circuit that runs Prometheus, Grafana and cAdvisor on a host with Docker, as one Compose stack. Prometheus scrapes the targets you give it, Grafana comes up with Prometheus already set as its data source, and cAdvisor reports on every container on the host.
 
 Pair it with [circuit-docker](https://github.com/conn3xorg/circuit-docker) to get Docker on the host, and [circuit-node-exporter](https://github.com/conn3xorg/circuit-node-exporter) for the machines you want to watch. One configuration, one `conn3x apply`, and the dashboards are up.
@@ -8,13 +10,13 @@ Pair it with [circuit-docker](https://github.com/conn3xorg/circuit-docker) to ge
 
 ```hcl
 module "docker" {
-  source = "github.com/conn3xorg/circuit-docker?ref=v0.1.1"
+  source = "github.com/conn3xorg/circuit-docker?ref=v0.1.2"
 
   hosts = { monitor = "192.168.1.10" }
 }
 
 module "node_exporter" {
-  source = "github.com/conn3xorg/circuit-node-exporter?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-node-exporter?ref=v0.1.1"
 
   hosts = {
     nas    = "192.168.1.20"
