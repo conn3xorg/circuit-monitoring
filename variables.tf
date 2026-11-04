@@ -61,6 +61,13 @@ variable "retention" {
   type        = string
   default     = "15d"
   description = "How long Prometheus keeps samples, such as \"15d\" or \"6w\"."
+
+  # Prometheus only reads this at start, so a bad value would surface as a
+  # container that won't come up rather than here.
+  validation {
+    condition     = can(regex("^([0-9]+(ms|s|m|h|d|w|y))+$", var.retention))
+    error_message = "retention is a Prometheus duration, such as \"15d\", \"6w\" or \"1d12h\"."
+  }
 }
 
 variable "prometheus_listen" {
