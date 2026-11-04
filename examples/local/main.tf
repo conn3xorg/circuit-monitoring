@@ -20,7 +20,7 @@ locals {
 }
 
 module "docker" {
-  source = "github.com/conn3xorg/circuit-docker?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-docker?ref=v0.1.2"
 
   hosts                = local.box
   ssh_port             = local.ssh.ssh_port
@@ -29,7 +29,7 @@ module "docker" {
 }
 
 module "node_exporter" {
-  source = "github.com/conn3xorg/circuit-node-exporter?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-node-exporter?ref=v0.1.1"
 
   hosts                = local.box
   ssh_port             = local.ssh.ssh_port
