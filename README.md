@@ -26,7 +26,7 @@ module "node_exporter" {
 }
 
 module "monitoring" {
-  source = "github.com/conn3xorg/circuit-monitoring?ref=v0.2.2"
+  source = "github.com/conn3xorg/circuit-monitoring?ref=v0.2.3"
 
   hosts                  = { monitor = "192.168.1.10" }
   grafana_admin_password = var.grafana_admin_password
