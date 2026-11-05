@@ -10,7 +10,7 @@ Pair it with [circuit-docker](https://github.com/conn3xorg/circuit-docker) to ge
 
 ```hcl
 module "docker" {
-  source = "github.com/conn3xorg/circuit-docker?ref=v0.1.2"
+  source = "github.com/conn3xorg/circuit-docker?ref=v0.2.0"
 
   hosts = { monitor = "192.168.1.10" }
 }
