@@ -29,7 +29,7 @@ module "docker" {
 }
 
 module "node_exporter" {
-  source = "github.com/conn3xorg/circuit-node-exporter?ref=v0.1.1"
+  source = "github.com/conn3xorg/circuit-node-exporter?ref=v0.1.3"
 
   hosts                = local.box
   ssh_port             = local.ssh.ssh_port
