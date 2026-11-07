@@ -91,10 +91,12 @@ The circuit doesn't open firewall ports. Grafana stays on loopback unless you se
 | `prometheus_port` | number | `9090` | Host port Prometheus is published on. |
 | `grafana_listen` | string | `"127.0.0.1"` | Address Grafana's port 3000 is published on. |
 | `cadvisor` | bool | `true` | Run cAdvisor too. |
-| `prometheus_digest`, `grafana_digest`, `cadvisor_digest` | string | The digests of the default tags | Digest of each image. Set it whenever you change that image's version. |
 | `prometheus_version` | string | `"v3.15.0"` | Tag of the `prom/prometheus` image. |
 | `grafana_version` | string | `"13.2.4"` | Tag of the `grafana/grafana` image. |
 | `cadvisor_version` | string | `"v0.60.6"` | Tag of the `ghcr.io/google/cadvisor` image. |
+| `prometheus_digest` | string | `"sha256:efd719c9..."` | Digest of the image for `prometheus_version`. Change it with the version. |
+| `grafana_digest` | string | `"sha256:dbbc38ea..."` | Digest of the image for `grafana_version`. Change it with the version. |
+| `cadvisor_digest` | string | `"sha256:b8e7d109..."` | Digest of the image for `cadvisor_version`. Change it with the version. |
 | `ssh_user` | string | `"root"` | User to log in as. |
 | `ssh_port` | number | `22` | SSH port. |
 | `ssh_private_key_file` | string | `null` | Path to a private key. When null, Conn3x uses the SSH agent. |
