@@ -107,7 +107,7 @@ variable "prometheus_version" {
 
 variable "grafana_version" {
   type        = string
-  default     = "13.2.4"
+  default     = "13.2.6"
   description = "Tag of the grafana/grafana image."
 }
 
@@ -130,7 +130,7 @@ variable "prometheus_digest" {
 
 variable "grafana_digest" {
   type        = string
-  default     = "sha256:dbbc38ea21103cefb50396340cd88afec779c7e070b0a7bf5a75b4ce46651d3f"
+  default     = "sha256:b21409d7951ddcfd63a4b49083e4ef2cc35bc1437d071813bf82bfb238b00bca"
   description = "Digest of the image for grafana_version. Change it with the version."
 
   validation {
